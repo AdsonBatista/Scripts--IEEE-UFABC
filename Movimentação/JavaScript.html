@@ -1,0 +1,187 @@
+<!-- 
+"Scripts" utilizados no formulário mov_form.html
+Cada conjunto <script> </script> contém todas as funções necessárias para seu funcionamento.
+-->
+<!--Import jQuery before materialize.js-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+<script>
+    // ---------------------------------------------------------------------------
+    // Funções que ocorrem depois do botão "Enviar".
+    // ---------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------
+    // Mostrar os resultados.
+    // ---------------------------------------------------------------------------
+    function updateOutput(resultHtml) {
+        toggle_visibility('inProgress');
+        // Torma a "div" com id=output a variável outputDiv
+        var outputDiv = document.getElementById('output');
+        // Troca a Variavel atual de outputDiv pela ResultHtml (template)
+        outputDiv.innerHTML = resultHtml;
+        // Oculta a div com id=formDiv (o formulário)
+        toggle_visibility('formDiv');
+    }
+    // ---------------------------------------------------------------------------
+    // Função trocar a visibilidade de um uma "div".
+    // ---------------------------------------------------------------------------
+    function toggle_visibility(id) {
+        var e = document.getElementById(id);
+        if (e.style.display == 'block')
+            e.style.display = 'none';
+        else
+            e.style.display = 'block';
+    }
+</script>
+
+<script>
+    // ---------------------------------------------------------------------------
+    // Necessário para utilizar dar acesso a câmera no "input type=file".
+    // https://developers.google.com/web/fundamentals/native-hardware/capturing-images/?hl=pt-br
+    // ---------------------------------------------------------------------------     
+    var camera = document.getElementById('camera');
+    var frame = document.getElementById('frame');
+
+    camera.addEventListener('change', function(e) {
+        var file = e.target.files[0];
+        // Faça algo com o arquivo de imagem.
+        frame.src = URL.createObjectURL(file);
+    });
+</script>
+
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#blah').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#imgInp").change(function() {
+        readURL(this);
+    });
+</script>
+
+<script>
+    // ---------------------------------------------------------------------------
+    // "Script" para liberar o botão de envio de formulário 
+    // https://stackoverflow.com/a/45420938/8394730 
+    // ---------------------------------------------------------------------------
+    window.areAllQuestionsAnswered = function() {
+        // Criação das variáveis utilizadas na função
+        var allInputs, allDropDowns, arrayOfQuestions, i, j, L, L2,
+            questionType, theseQuestions, allTextArea,
+            thisQuestion, thisQstnType, thisValue;
+        // Definições das variáveis utilizando a "Tag" html.
+        allInputs = document.getElementsByTagName("INPUT");
+        allDropDowns = document.getElementsByTagName("SELECT");
+        allTextArea = document.getElementsByTagName("TEXTAREA");
+        // Criação do vetor com todas as questoes.
+        arrayOfQuestions = [allInputs, allDropDowns, allTextArea];
+        // Define a variável L como o comprimento de todas as repostas.
+        L = arrayOfQuestions.length;
+        // O primeiro "for" percorre o "array" elemento por elemento e diz que a variável L2 tem o comprimento deste elemento.
+        for (i = 0; i < L; i++) {
+
+            theseQuestions = arrayOfQuestions[i];
+
+            L2 = theseQuestions.length;
+            // O segundo "for" percorre o elemento de comprimento L2 e verifica o tipo saida que é.
+            for (j = 0; j < L2; j++) {
+                thisQuestion = theseQuestions[j];
+                thisQstnType = thisQuestion.type;
+                // Se é um "checkbox" ele pega valor ou verifica se está checada.
+                // Informações sobre o "===" em:
+                // http://www.devmedia.com.br/javascript-como-e-quando-utilizar-os-operadores-e/37782
+                if (thisQstnType === 'checkbox') {
+                    thisValue = thisQuestion.checked;
+                } else {
+                    thisValue = thisQuestion.value;
+                }
+                // Se o valor de "ThisValue" for vazio ou indefinido retorna falso e volta para questionário pois pelo menos 1 questão não está respondida.
+                if (!thisValue) {
+                    enableOrDisableSave(false);
+                    return;
+                }
+            }
+        }
+        //Se o codigo chegou aqui todas as questões foram respondidas então libera botão "enviar".
+        enableOrDisableSave(true); 
+    }
+
+    window.enableOrDisableSave = function(enable) {
+        var saveBtn;
+        // defina a variavel saveBtn como o botão de "ID = botao" 
+        saveBtn = document.getElementById('botao');
+
+        if (enable) {
+            //Ativa o botão "Enviar", removendo a configuração de desativação.
+            saveBtn.removeAttribute('disabled'); 
+        } else {
+            // Desativa o botão "Enviar" configurando o atributo.
+            saveBtn.setAttribute('disabled', 'disabled'); 
+        }
+
+    }
+</script>
+
+<script>
+    // ---------------------------------------------------------------------------
+    // Necessário para utilizar o recurso Modal do "Materializecss".
+    // http://materializecss.com/modals.html#!
+    // ---------------------------------------------------------------------------
+    $(document).ready(function() {
+        $('.modal').modal();
+    });
+</script>
+
+<script>
+    // ---------------------------------------------------------------------------
+    // Necessário para utilizar o recurso "Textarea" do "Materializecss".
+    // http://materializecss.com/forms.html
+    // ---------------------------------------------------------------------------          
+    $('#textarea1').val('New Text');
+    $('#textarea1').trigger('autoresize');
+</script>
+
+<script>
+    // ---------------------------------------------------------------------------
+    // Necessário para utilizar o recurso "Pickadate" do "Materializecss".
+    // http://materializecss.com/forms.html
+    // Personalização do "Pickadate" para o Português.
+    // https://gist.github.com/claudiohilario/88771cf84cc87f6cbd0d269f9674257f
+    // --------------------------------------------------------------------------- 
+    $(document).ready(function() {
+        $('select').material_select();
+        $('.datepicker').pickadate({
+            // Cria um menu "dropdown" para selecionar o mês.
+            selectMonths: true,
+            // Cria um menu "dropdown" selecionar o ano com um intervalo de 15 anos.
+            selectYears: 15,
+            // Fecha depois que seleciona a data.
+            closeOnSelect: false,
+            // Legenda dos botões de navegação.
+            labelMonthNext: 'Proximo Mês',
+            labelMonthPrev: 'Mês Anterior',
+            // Legendas dos menus "dropdown".
+            labelMonthSelect: 'Selecionar Mês',
+            labelYearSelect: 'Selecionar Ano',
+            // Mês e Semana.
+            monthsFull: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+            monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Maio', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            weekdaysFull: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+            weekdaysShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+            weekdaysLetter: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
+            //Botões.
+            today: 'Hoje',
+            clear: 'Limpar',
+            close: 'Fechar',
+            //Formato da data no "input".
+            format: 'dd/mm/yyyy',
+        });
+    });
+</script>

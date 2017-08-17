@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <base target="_blank">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+    <?!= include('Stylesheet'); ?>
+</head>
+
+<body>
+    <div class="ctrlqFormContentWrapper" id="formDiv" style="display: initial;">
+        <div class="ctrlqHeaderMast"></div>
+        <div class="ctrlqCenteredContent">
+            <div class="ctrlqFormCard">
+                <div class="ctrlqAccent"></div>
+                <div class="ctrlqFormContent">
+                    <form id="form" novalidate="novalidate">
+                        <div id="forminner">
+                            <div class="row">
+                                <div class="col s12">
+                                    <h5 class="center-align teal-text">Atividades</h5>
+                                    <p class="disclaimer">Este formulário foi feito para report de atividades. Os textos aqui colocados serão utilizados para produzir um documento de report no final do ano.</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="name" type="text" name="name" class="validate" required="" aria-required="true">
+                                    <label for="name">Nome da atividade:</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <select name="unidade" id="unidade" multiple>
+                                        <option disabled selected></option>
+                                        <option>Ramo</option>
+                                        <option>AESS</option>
+                                        <option>CS</option>
+                                        <option>CPMT</option>
+                                        <option>EMBS</option>
+                                        <option>PES</option>
+                                        <option>RAS</option>
+                                        <option>TEMS</option>
+                                    </select>
+                                    <label>Unidade responsável:</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <select id="tipoatividade" name="tipoatividade">
+                                        <option disabled selected></option>
+                                        <option>Competição</option>
+                                        <option>Confraternização</option>
+                                        <option>Curso</option>
+                                        <option>Desenvolvimento de Parcerias e Networking</option>
+                                        <option>Doação</option>
+                                        <option>Evento</option>
+                                        <option>Visita técnica</option>
+                                        <option>Palestra/Mesa Redonda</option>
+                                        <option>Projeto Técnico</option>
+                                        <option>Promoção da Entidade</option>
+                                        <option>Reunião</option>
+                                        
+                                    </select>
+                                    <label>Tipo de Atividade:</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input class="datepicker" id="data" type="text" name="data">
+                                    <label for="data">Data da Atividade:</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="resp_name" type="text" name="resp_name" class="validate" required="" aria-required="true">
+                                    <label for="resp_name">Responsável pela Atividade:</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="parceiros" type="text" name="parceiros">
+                                    <label for="parceiros">Parcerias da Atividade:</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="email" type="email" name="Email" class="validate" pattern="[a-zA-Z0-9_\.\+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-\.]+" required="" aria-required="true">
+                                    <label for="email" data-error="Email inválido">E-mail do Responsável:</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <textarea class="materialize-textarea" id="descricao" type="text" name="descricao" class="validate" required=""></textarea>
+                                    <label for="descricao">Descrição da Atividade:</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <textarea class="materialize-textarea" id="observacao" type="text" name="observacao" class="validate" required=""></textarea>
+                                    <label for="observacao">Observações sobre a Atividade:</label>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col m6 s12">
+                                        <select id="imagem" name="imagem">
+                                            <option disabled selected></option>
+                                            <option value="Sim">Sim</option>
+                                            <option value="Nao">Não</option>
+                                        </select>
+                                        <label>O report da atividade contém Mídias?</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="botao"  style='display:none;' class="row">
+                                <div class="file-field input-field col s12">
+                                    <div class="btn" style="width: 100%;">
+                                        <span>Upload de arquivo(s) de Mídias</span>
+                                        <input id="files" type="file" multiple>
+                                    </div>
+                                    <div id="count-files" style='text-align: center; margin-top: 70px;'></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12" style="margin: 0 auto;">
+                                    <button id="submit" class="waves-effect waves-light btn submit-btn" type="submit" style="width: 100%;" onclick="iteratorFileUpload(function(){logSheet();}); return false;">Confirmar</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12" id="progress">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="success" style="display:none; margin-top: 100px;">
+                            <h5 class="left-align teal-text">Formulário preenchido com sucesso</h5>
+                            <p>Please check this link edit your files if neccessary.</p>
+                            <br>
+                            <p>Please check this link <a href="" id="folder-url"></a> edit your files if neccessary.</p>
+                        </div>
+                        <div id="success2">
+                        <!-- Está div será substituida pelo modelo "obrigado.html" depois da submissão do formulário. -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?!= include('JavaScript'); ?>    
+</body>
+
+</html>

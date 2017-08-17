@@ -1,0 +1,160 @@
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<script>
+$(document).ready(
+    function() {
+        $('#files').on('change', function() {
+            var files_count = this.files.length;
+            $('#count-files').text(files_count.toString() + ' arquivo(s) sendo processados.');
+        });
+    }
+);
+
+function logSheet() {
+    if (imagem == "Sim") {
+        google.script.run.withSuccessHandler(function(e) { console.log('logged to sheet') }).logSheet($('#name').val(), $('#unidade').val(), $('#tipoatividade').val(), $('#data').val(), $('#resp_name').val(), $('#parceiros').val(), $('#email').val().toLowerCase(), $('#descricao').val(), $('#observacao').val(), $('#imagem').val(), Date().toString());
+    } else {google.script.run.withSuccessHandler(showSuccess2).logSheet($('#name').val(), $('#unidade').val(), $('#tipoatividade').val(), $('#data').val(), $('#resp_name').val(), $('#parceiros').val(), $('#email').val().toLowerCase(), $('#descricao').val(), $('#observacao').val(), $('#imagem').val(), Date().toString());
+
+    }
+}
+// Upload the files into a folder in drive
+// This is set to send them all to one folder (specificed in the .gs file)
+function iteratorFileUpload(callback) {
+    var allFiles = document.getElementById('files').files;
+    var name = $('#name').val();
+    var unidade = $('#unidade').val();
+    var tipoatividade = $('#tipoatividade').val();
+    var data = $('#data').val();
+    var resp_name = $('#resp_name').val();
+    var parceiros = $('#parceiros').val();
+    var email = $('#email').val().toLowerCase();
+    var descricao = $('#descricao').val();
+    var observacao = $('#observacao').val();
+    var imagem = $('#imagem').val();
+    if (name == "" || unidade == "" || tipoatividade == "" || data == "" || resp_name == "" || email == "" || descricao == "") {
+        swal({
+            title: "Alerta!",
+            text: "Os Existem campos obrigatorios não respondidos!",
+            type: "warning",
+            confirmButtonColor: "#DD6B55",
+            closeOnConfirm: false
+        });
+        //alert("Os Existem campos obrigatorios não respondidos");
+        return;
+    }
+    if (imagem == "Sim") {
+        if (allFiles.length == 0) {
+            swal({
+                title: "Alerta!",
+                text: "Faça o upload de pelo menos uma Fotografia!",
+                type: "warning",
+                confirmButtonColor: "#DD6B55",
+                closeOnConfirm: false
+            });
+            return;
+        } else {
+            $("#submit").prop("disabled", true).text("Fazendo upload das Imagens...");
+            for (var i = 0; i < allFiles.length; i++) {
+                console.log(i);
+                if (i == 0)
+                    sendFileToDrive(allFiles[i], true);
+                else {
+                    sendFileToDrive(allFiles[i]);
+                }
+            }
+        }
+    } else {
+        $("#submit").prop("disabled", true).text("Enviando respostas");
+    }
+    callback();
+}
+
+function sendFileToDrive(file, first = false) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var content = reader.result;
+        var data = $('#data').val();
+        var name = $('#name').val();
+        var unidade = $('#unidade').val()
+        var user_dir_name = unidade + ' - ' + data + ' - ' + name;
+        google.script.run.withSuccessHandler(get_folder_url).uploadFilesToDrive(content, file.name, user_dir_name, first);
+    }
+    reader.readAsDataURL(file);
+}
+
+function get_folder_url(e) {
+    if (e === "OK") {
+        var name = $('#name').val().toUpperCase();
+        var data = $('#data').val();
+        var name = $('#name').val();
+        var unidade = $('#unidade').val();
+        var user_dir_name = unidade + ' - ' + data + ' - ' + name;
+        google.script.run.withSuccessHandler(showSuccess).get_shared_folders(user_dir_name);
+    } else {
+        showError(e);
+    }
+}
+
+function showSuccess(e) {
+    $('#forminner').hide();
+    var text = $('#name').val();
+    $('#folder-url').attr('href', e).html(e);
+    $('#success').show();
+}
+
+function showSuccess2(resultHtml) {
+    $('#forminner').hide();
+    var outputDiv = document.getElementById('success2');
+    outputDiv.innerHTML = resultHtml;
+    $('#success2').show();
+}
+
+function showError(e) {
+    $('#progress').addClass('red-text').html(e);
+}
+
+function showMessage(e) {
+    $('#progress').removeClass('red-text').html(e);
+}
+</script>
+<script>
+$(document).ready(function() {
+
+    $('select').material_select();
+
+    $('.datepicker').pickadate({
+        format: 'dd/mm/yyyy',
+        monthsFull: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+        monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+        weekdaysFull: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabádo'],
+        weekdaysShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+        today: 'Hoje',
+        clear: 'Limpar',
+        close: 'Pronto',
+        labelMonthNext: 'Próximo mês',
+        labelMonthPrev: 'Mês anterior',
+        labelMonthSelect: 'Selecione um mês',
+        labelYearSelect: 'Selecione um ano',
+        selectMonths: true,
+        selectYears: 15
+    });
+});
+</script>
+<script>
+$('#textarea1').val('New Text');
+$('#textarea1').trigger('autoresize');
+
+$(document).ready(function(){
+    $('#imagem').on('change', function() {
+      if ( this.value == 'Sim')
+      {
+        $("#botao").show();
+      }
+      else
+      {
+        $("#botao").hide();
+      }
+    });
+});
+</script>

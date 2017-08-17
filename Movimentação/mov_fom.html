@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <base target="_blank">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=0.5,maximum-scale=4">
+    <!-- Importar as configurações gráficas gerais de repositórios da internet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Título do formulário -->
+    <title>Formulário de Movimentações Financeiras</title>
+    <!-- Importar configurações CSS do arquivo Stylesheet.html -->
+    <?!= include('Stylesheet'); ?>
+</head>
+
+<body>
+    <div class="FormContentWrapper">
+        <!-- "HeaderMast" define a região verde-escura do formulário-->
+        <div class="HeaderMast"></div>
+        <!-- "CenteredContent" define largura da região de escrita e a posição dela-->
+        <div class="CenteredContent">
+            <div class="FormCard">
+                <!-- "Accent" linha verde mais clara entre o formulário e o verde escuro-->
+                <div class="Accent"></div>
+                <div class="FormContent">
+
+                    <!-- "Formdiv" é a "div" para ocultar o formulário-->
+                    <form novalidate="novalidate" id="formDiv" style="display: initial;">
+
+                        <!-- Área de texto explicativo . -->
+                        <div class="col s12">
+                            <h4 class="center-align teal-text">Movimentações Financeiras</h4>
+                            <p align="justify"> Este formulário é para as movimentações financeiras do caixa do ramo e dos capítulos. Os dados aqui gerados serão utilizados no relatório financeiro do Ramo.
+                                <br>Este controle é valido apenas para caixa físico do Ramo. Para informações ou movimentações relativas ao caixa da seção, procure o tesoureiro do Ramo.</p>
+                            <br>
+                            <p><font color="red">O botão enviar formulário será habilitado após o preenchimento de todos os campos.</font></p>
+                            <br>
+                            <br>
+                        </div>
+
+                        <!-- Área do menu "dropdown" para escolha da unidade. -->
+                        <div class="row">
+                            <div name="unidade" class="col m6 s12">
+                                <label>Unidade:</label>
+                                <select name="unidade" onchange="areAllQuestionsAnswered()" required>
+                                    <option disabled selected>Unidade:</option>
+                                    <option>Ramo</option>
+                                    <option>AESS</option>
+                                    <option>CS</option>
+                                    <option>CPMT</option>
+                                    <option>EMBS</option>
+                                    <option>PES</option>
+                                    <option>RAS</option>
+                                    <option>TEMS</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Área de menu "dropdown" para escolha do tipo de transação. -->
+                        <div class="row">
+                            <div name="tipotransacao" class="col m6 s12">
+                                <label>Tipo de Transação:</label>
+                                <select name="tipotransacao" onchange="areAllQuestionsAnswered()" required>
+                                    <option disabled selected>Tipo de Transação:</option>
+                                    <option>Entrada</option>
+                                    <option>Saída</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Área de "input" numérico possibilitando o uso das setas de ajuste. -->
+                        <div class="row">
+                            <div class="input-field col m6 s12">
+                                <input id="valor" name="valor" type="number" min="0" max="10000" step="0.05" onchange="areAllQuestionsAnswered()" required/>
+                                <br/>
+                                <label for="valor">Valor em Reais:</label>
+                            </div>
+                        </div>
+
+                        <!-- Área de "input" de data. -->
+                        <div class="row">
+                            <!-- "input-field" Apresenta erro na classe "datepicker" -->
+                            <!--https://github.com/Dogfalo/materialize/issues/5030-->
+                            <div class="col m6 s12">
+                                <label for="data">Data da Movimentação:</label>
+                                <input id="data" class="datepicker" onchange="areAllQuestionsAnswered()" name="data" type="text" value="" required>
+                            </div>
+                        </div>
+
+                        <!-- Área de "input" de texto curto, do tipo e-mail -->
+                        <div class="row">
+                            <div class="input-field col m6 s12">
+                                <input id="email" type="email" name="email" class="validate" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" onchange="areAllQuestionsAnswered()" required>
+                                <label for="email" data-error="E-mail invalido">E-mail:</label>
+                            </div>
+                        </div>
+
+                        <!-- Área de "input" de texto longo "textarea", referente a descrição do gasto -->
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <textarea name="descricaogasto" class="materialize-textarea validate" data-length="300" onchange="areAllQuestionsAnswered()" required></textarea>
+                                <label for="descricaogasto">Faça uma breve descrição do gasto aqui:</label>
+                            </div>
+                        </div>
+
+                        <!-- Área de texto explicativo . -->
+                        <div class="col s12">
+                            <h5 class="center-align teal-text">Comprovantes</h5>
+                            <p align="justify">Faça o upload do comprovante. Atente-se aos seguintes pontos:
+                                <br>
+                            </p>
+                            <ul>
+                                <li> - Você pode utilizar a câmera do seu celular diretamente se preferir.</li>
+                                <li> - Lembre-se, o arquivo é um documento, então verifique a qualidade da foto antes de enviar.</li>
+                                <li> - Só é possivel o envio de um arquivo, então se for necessário o envio de mais arquivos, utilize o formato .zip.</li>
+                                <li> - O comprovante físico deve ser arquivado no local correto.</li>
+                                <li> - O arquivo será renomeado e direcionado adequadamente.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Botão para carregar as imagens. -->
+                        <div class="file-field input-field col m6 s12">
+                            <div class="btn">
+                                <span>Arquivo:</span>
+                                <input name="myFile" type="file" accept="image/*" capture="camera" id="camera" onchange="areAllQuestionsAnswered()" required>
+                            </div>
+                            <!-- Área em que é escrito o nome das imagens carregadas. -->
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text" onchange="areAllQuestionsAnswered()" required>
+                            </div>
+                        </div>
+
+                        <br>
+                        <br>
+
+                        <!-- Botão de envio. -->
+                        <button type="button" id="botao" class="btn-large waves-effect waves-light" style="width: 100%" disabled="disabled" onclick="toggle_visibility('formDiv'); toggle_visibility('inProgress');
+                           google.script.run
+                           .withSuccessHandler(updateOutput)
+                           .processForm(this.parentNode)">Enviar Formulário </button>
+                    </form>
+
+                    <!-- Aviso que o arquivo está upando aparece apenas depois da submissão. -->
+                    <div id="inProgress" style="display: none;" align="center">
+                        <br>
+                        <br> Enviando Dados. A página será recarregada quando o processo for concluído.
+                        <br>
+                        <br>
+                        <!-- Imagem do circulo "carregando". -->
+                        <div class="preloader-wrapper big active">
+                            <div class="spinner-layer spinner-blue">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="output">
+        <!-- "Div" que será substituída pela pagina "mov_Thanks.html" depois da submissão do formulário. -->
+    </div>
+
+    <!-- Estutura "Modal" utilizada nos botões flutuantes -->
+    <div id="modal1" class="modal modal-fixed-footer">
+        <div class="modal-content">
+            <h4>Modal Header</h4>
+            <p>A bunch of text</p>
+        </div>
+        <div class="modal-footer">
+            <a class="modal-action modal-close waves-effect waves-green btn-flat ">Agree</a>
+        </div>
+    </div>
+
+    <!-- Botões flutuantes -->
+    <div class="fixed-action-btn vertical click-to-toggle">
+        <a class="btn-floating btn-large red"><i class="material-icons">menu</i></a>
+        <ul>
+            <li><a class="btn-floating pink modal-trigger" href="#modal1"><i class="material-icons">help_outline</a></li>
+            <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
+            <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
+            <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+            <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
+        </ul>
+    </div>
+
+    <!-- Importar funções "JavaScript" do arquivo JavaScript.html -->
+    <?!= include('JavaScript'); ?>
+</body>
+
+</html>

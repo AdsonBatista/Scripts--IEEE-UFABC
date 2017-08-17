@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <base target="_top">
+   </head>
+   <body>
+      <div>
+         <!-- Título  -->
+         <h2 class="center-align teal-text">Aviso!</h2>
+          <!-- Corpo  -->
+         A seguinte transação foi feita: <br/>
+         Unidade: <?= unidade ?><br/>
+         Tipo de Transação: <?= tipotransacao ?><br/>
+         Valor em Reais: <?= valor ?><br/>
+         Data: <?= data ?><br/>
+         Descrição do gasto: <?= descricaogasto ?><br/>
+         Email: <a href="mailto:'<?= email ?>'"><?= email ?></a>.<br/> 
+         Nome do arquivo de recibo: <?= novonomearquivo ?> <br/>
+         URL do arquivo: <a href="<?= urlarquivo ?>"><?= urlarquivo ?></a><br/>
+         Para <b>cancelar</b> ou <b>modificar</b> a operação entre em contato com o tesoureiro do ramo.<br/> 
+         Identifique a operação utilizando o ID:  + <b> colocar o ID aqui </b> +
+      </div>
+      <!-- Assinatura  -->
+      <img src="https://drive.google.com/uc?id=0B8CcpExpMKFlZXNLdzJKWU9Wcm8" width="150">
+   </body>
+</html>
